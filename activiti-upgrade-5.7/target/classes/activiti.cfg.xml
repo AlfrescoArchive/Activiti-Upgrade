@@ -5,10 +5,10 @@
 	<bean id="processEngineConfiguration"
 		class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
 
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/activitiupgrade?autoReconnect=true" />
-		<property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUsername" value="activitiupgrade" />
-		<property name="jdbcPassword" value="activitiupgrade" />
+		<property name="jdbcUrl" value="@jdbc.url@" />
+		<property name="jdbcDriver" value="@jdbc.driver@" />
+		<property name="jdbcUsername" value="@jdbc.username@" />
+		<property name="jdbcPassword" value="@jdbc.password@" />
 		
 		<property name="databaseSchemaUpdate" value="true" />
 		<property name="jobExecutorActivate" value="false" />

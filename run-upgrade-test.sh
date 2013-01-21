@@ -14,7 +14,7 @@ else
     echo "Database type: $DATABASE"
         
 	echo
-    echo "Running old version module"
+    echo "Running old version module: generating Activiti data for Activiti $1"
     echo
     cd $OLD_VERSION_MODULE
     mvn -Ddatabase=$DATABASE -DoldVersion=true -Dmaven.test.skip=true clean test
@@ -23,7 +23,7 @@ else
 	if [ $STATUS -eq 0 ] 
 	then
 		echo
-		echo "Running new version module"
+		echo "Running new version module: running $2 unit tests against $1 data"
 		echo
     	cd ..
     	cd $NEW_VERSION_MODULE
