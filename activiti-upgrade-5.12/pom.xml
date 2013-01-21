@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Activiti Upgrade 5.8</name>
-	<artifactId>activiti-upgrade-5.8</artifactId>
+	<name>Activiti Upgrade 5.12</name>
+	<artifactId>activiti-upgrade-5.12</artifactId>
 	<packaging>jar</packaging>
 
     <parent>
@@ -18,8 +18,8 @@
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
-			<version>5.8</version>
+			<version>5.12-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-
+	
 </project>

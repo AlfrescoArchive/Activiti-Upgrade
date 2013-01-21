@@ -5,22 +5,21 @@
 
 	<name>Activiti - Upgrade</name>
 	<groupId>org.activiti</groupId>
-	<artifactId>activiti-upgrade-new</artifactId>
-	<version>5.11-SNAPSHOT</version>
+	<artifactId>activiti-upgrade-qa</artifactId>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<activiti.version>5.10</activiti.version>
 	</properties>
 
 	<modules>
-		<module>activiti-upgrade-common</module>
 		<module>activiti-upgrade-5.7</module>
 		<module>activiti-upgrade-5.8</module>
 		<module>activiti-upgrade-5.9</module>
 		<module>activiti-upgrade-5.10</module>
 		<module>activiti-upgrade-5.11</module>
+		<module>activiti-upgrade-5.12</module>
 	</modules>
 
 	<dependencies>
@@ -72,6 +71,22 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>2.0.5</version>
+		</dependency>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.2</version>
 		</dependency>
 	</dependencies>
 
