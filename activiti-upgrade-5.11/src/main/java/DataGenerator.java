@@ -30,7 +30,7 @@ public class DataGenerator {
   }
   
   private static void createCommonData(ProcessEngine processEngine) {
-    // UpgradeTaskOneTest in 5.8
+    // UpgradeTaskOneTest
     RuntimeService runtimeService = processEngine.getRuntimeService();
     TaskService taskService = processEngine.getTaskService();
 
@@ -44,7 +44,7 @@ public class DataGenerator {
     String taskId = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult().getId();
     taskService.complete(taskId);
     
-    // UpgradeTaskTwoTest in 5.8
+    // UpgradeTaskTwoTest 
     processEngine.getRepositoryService().createDeployment().name("simpleTaskProcess")
             .addClasspathResource("org/activiti/upgrade/test/UserTaskBeforeTest.testTaskWithExecutionVariables.bpmn20.xml")
             .deploy();
