@@ -136,7 +136,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<mainClass>DataGenerator</mainClass>
+							<mainClass>org.activiti.upgrade.DataGenerator</mainClass>
 						</configuration>
 					</plugin>
 				</plugins>
