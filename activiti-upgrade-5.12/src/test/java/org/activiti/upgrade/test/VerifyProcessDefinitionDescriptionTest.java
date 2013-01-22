@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  * 
  * @author Joram Barrez
  */
-@RunOnlyWithTestDataFromVersion("5.10")
+@RunOnlyWithTestDataFromVersion(versions = {"5.7", "5.8", "5.9", "5.10"})
 public class VerifyProcessDefinitionDescriptionTest extends UpgradeTestCase {
 
   @Test

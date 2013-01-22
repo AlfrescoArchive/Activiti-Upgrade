@@ -60,6 +60,7 @@ public class DataGenerator {
     runtimeService.startProcessInstanceByKey("taskWithExecutionVariablesProcess", variables);
   }
   
+  // Test data for changes specific to the 5.11 version
   private static void create511SpecificData(ProcessEngine processEngine) {
     // VerifyProcessDefinitionDescriptionTest in 5.11
     processEngine.getRepositoryService()
@@ -68,7 +69,7 @@ public class DataGenerator {
       .addClasspathResource("org/activiti/upgrade/test/VerifyProcessDefinitionDescriptionTest.bpmn20.xml")
       .deploy();
     
-    // SuspendAndActivateFunctionalityTest in 5.12
+    // SuspendAndActivateFunctionalityTest in 5.11
     // Deploy test process, and start a few process instances
     Deployment deployment = processEngine.getRepositoryService().createDeployment()
       .name("SuspendAndActivateFunctionalityTest")

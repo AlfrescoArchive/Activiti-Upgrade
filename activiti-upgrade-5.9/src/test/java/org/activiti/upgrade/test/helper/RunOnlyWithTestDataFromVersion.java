@@ -18,12 +18,21 @@ import java.lang.annotation.Target;
  */
 
 /**
+ * Annotation for upgrade unit test extending from {@link UpgradeTestCase}.
+ * Allows to indicate where this test must be executed, eg
+ * 
+ * <code>@RunOnlyWithTestDataFromVersion(versions = {"5.7", "5.8", "5.9", "5.10"})</code>
+ * 
+ * Means that the 5.7 - 5.10 data generators create test data usable by this test.
+ * This probably means that the bug was fixed in 5.11. As such, executing the test
+ * doesn't make sense on 5.11+, as the test data would correct (ie not bugged).
+ * 
  * @author Joram Barrez
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface RunOnlyWithTestDataFromVersion {
   
-  String value();
+  String[] versions();
 
 }

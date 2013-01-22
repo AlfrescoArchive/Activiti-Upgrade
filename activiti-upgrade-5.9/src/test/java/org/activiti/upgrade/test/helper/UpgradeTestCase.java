@@ -56,9 +56,20 @@ public class UpgradeTestCase {
     // verify if there is an minimal version requirement on the test
     RunOnlyWithTestDataFromVersion runOnlyWithTestDataFromVersion = this.getClass().getAnnotation(RunOnlyWithTestDataFromVersion.class);
     if (runOnlyWithTestDataFromVersion != null) {
-      ActivitiVersion requiredVersion = new ActivitiVersion(runOnlyWithTestDataFromVersion.value());
-      ActivitiVersion oldVersion = UpgradeUtil.getOldVersion(); // This is the version against which the data was generated
-      Assume.assumeTrue(oldVersion.compareTo(requiredVersion) == 0);
+      
+      String[] versions = runOnlyWithTestDataFromVersion.versions();
+      boolean versionMatches = false;
+      
+      int index = 0;
+      while (!versionMatches && index < versions.length) {
+        ActivitiVersion requiredVersion = new ActivitiVersion(versions[index]);
+        ActivitiVersion oldVersion = UpgradeUtil.getOldVersion(); // This is the version against which the data was generated
+        versionMatches = oldVersion.compareTo(requiredVersion) == 0;
+        
+        index++;
+      }
+    
+      Assume.assumeTrue(versionMatches);
     }
   }
   
