@@ -16,8 +16,11 @@ import org.activiti.engine.ActivitiException;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.upgrade.test.helper.MinimalOldVersion;
+import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * Suspending and activating process definitions and process instances was added
@@ -25,9 +28,10 @@ import org.activiti.upgrade.test.helper.UpgradeTestCase;
  * 
  * @author Joram
  */
-@MinimalOldVersion("5.10")
+@RunOnlyWithTestDataFromVersion("5.10")
 public class SuspendAndActivateFunctionalityTest extends UpgradeTestCase {
 
+  @Test
   public void testSuspendProcessDefinition() {
 
     ProcessDefinition processDefinition = processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("suspendAndActivate")
@@ -56,6 +60,7 @@ public class SuspendAndActivateFunctionalityTest extends UpgradeTestCase {
     assertEquals(0, processEngine.getRuntimeService().createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).suspended().count());
   }
 
+  @Test
   public void testSuspendProcessInstance() {
 
     ProcessDefinition processDefinition = processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("suspendAndActivate")

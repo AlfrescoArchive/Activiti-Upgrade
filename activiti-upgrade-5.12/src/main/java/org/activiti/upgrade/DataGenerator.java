@@ -5,8 +5,6 @@ import java.util.Map;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.upgrade.helper.UpgradeUtil;
 
@@ -31,7 +29,6 @@ public class DataGenerator {
   public static void main(String[] args) {
     ProcessEngine processEngine = UpgradeUtil.getProcessEngine();
     createCommonData(processEngine);
-    create511SpecificData(processEngine);
   }
   
   private static void createCommonData(ProcessEngine processEngine) {
@@ -58,30 +55,6 @@ public class DataGenerator {
     variables.put("instrument", "trumpet");
     variables.put("player", "gonzo");
     runtimeService.startProcessInstanceByKey("taskWithExecutionVariablesProcess", variables);
-  }
-  
-  private static void create511SpecificData(ProcessEngine processEngine) {
-    // VerifyProcessDefinitionDescriptionTest in 5.11
-    processEngine.getRepositoryService()
-      .createDeployment()
-      .name("verifyProcessDefinitionDescription")
-      .addClasspathResource("org/activiti/upgrade/test/VerifyProcessDefinitionDescriptionTest.bpmn20.xml")
-      .deploy();
-    
-    // SuspendAndActivateFunctionalityTest in 5.12
-    // Deploy test process, and start a few process instances
-    Deployment deployment = processEngine.getRepositoryService().createDeployment()
-      .name("SuspendAndActivateFunctionalityTest")
-      .addClasspathResource("org/activiti/upgrade/test/SuspendAndActivateUpgradeTest.bpmn20.xml")
-      .deploy();
-    
-    ProcessDefinition processDefinition = processEngine.getRepositoryService().createProcessDefinitionQuery()
-            .deploymentId(deployment.getId())
-            .singleResult();
-    
-    for (int i=0; i<5; i++) {
-      processEngine.getRuntimeService().startProcessInstanceById(processDefinition.getId());
-    }
   }
 
 }

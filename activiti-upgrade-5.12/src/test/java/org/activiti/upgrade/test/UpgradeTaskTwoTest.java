@@ -18,10 +18,13 @@ import java.util.Map;
 
 import org.activiti.engine.task.Task;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
+import org.junit.Test;
 
+import static org.junit.Assert.*;
 
 public class UpgradeTaskTwoTest extends UpgradeTestCase {
-  
+
+  @Test
   public void testTaskWithExecutionVariables() {
     Task task = taskService
       .createTaskQuery()

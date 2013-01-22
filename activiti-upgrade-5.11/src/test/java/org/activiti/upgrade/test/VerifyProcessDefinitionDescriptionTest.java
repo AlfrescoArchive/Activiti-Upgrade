@@ -13,8 +13,10 @@ package org.activiti.upgrade.test;
  */
 
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.upgrade.test.helper.MinimalOldVersion;
+import static org.junit.Assert.*;
+import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
+import org.junit.Test;
 
 /**
  * This is an upgrade test added for the 5.11 release. In that release, we've
@@ -23,9 +25,10 @@ import org.activiti.upgrade.test.helper.UpgradeTestCase;
  * 
  * @author Joram Barrez
  */
-@MinimalOldVersion("5.10")
+@RunOnlyWithTestDataFromVersion("5.10")
 public class VerifyProcessDefinitionDescriptionTest extends UpgradeTestCase {
 
+  @Test
   public void testProcessDefinitionDescription() {
 
     // We don't upgrade the process definition description, we only add the column.

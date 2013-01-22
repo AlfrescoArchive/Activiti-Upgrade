@@ -1,9 +1,17 @@
 package org.activiti.upgrade.test.helper;
 
-import org.activiti.engine.test.ActivitiTestCase;
+import org.activiti.engine.FormService;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.ManagementService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.upgrade.helper.ActivitiVersion;
 import org.activiti.upgrade.helper.UpgradeUtil;
 import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Ignore;
 
 /* Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,24 +31,35 @@ import org.junit.Ignore;
  * @author Joram Barrez
  */
 @Ignore
-public class UpgradeTestCase extends ActivitiTestCase {
+public class UpgradeTestCase {
   
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected ProcessEngine processEngine;
+  protected TaskService taskService;
+  protected RuntimeService runtimeService;
+  protected RepositoryService repositoryService;
+  protected ManagementService managementService;
+  protected FormService formService;
+  protected IdentityService identityService;
+  protected HistoryService historyService;
+  
+  @Before
+  public void setup() {
+    this.processEngine = UpgradeUtil.getProcessEngine("activiti.cfg.xml");
+    this.taskService = processEngine.getTaskService();
+    this.runtimeService = processEngine.getRuntimeService();
+    this.repositoryService = processEngine.getRepositoryService();
+    this.managementService = processEngine.getManagementService();
+    this.formService = processEngine.getFormService();
+    this.identityService = processEngine.getIdentityService();
+    this.historyService = processEngine.getHistoryService();
     
     // verify if there is an minimal version requirement on the test
-    MinimalOldVersion minimalOldVersion = this.getClass().getAnnotation(MinimalOldVersion.class);
-    if (minimalOldVersion != null) {
-      ActivitiVersion minimalVersion = new ActivitiVersion(minimalOldVersion.value());
+    RunOnlyWithTestDataFromVersion runOnlyWithTestDataFromVersion = this.getClass().getAnnotation(RunOnlyWithTestDataFromVersion.class);
+    if (runOnlyWithTestDataFromVersion != null) {
+      ActivitiVersion requiredVersion = new ActivitiVersion(runOnlyWithTestDataFromVersion.value());
       ActivitiVersion oldVersion = UpgradeUtil.getOldVersion(); // This is the version against which the data was generated
-      Assume.assumeTrue(oldVersion.compareTo(minimalVersion) >= 0);
+      Assume.assumeTrue(oldVersion.compareTo(requiredVersion) == 0);
     }
-  }
-  
-  @Override
-  protected void initializeProcessEngine() {
-    this.processEngine = UpgradeUtil.getProcessEngine(getConfigurationResource());
   }
   
 }

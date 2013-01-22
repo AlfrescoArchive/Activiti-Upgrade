@@ -19,9 +19,13 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class UpgradeTaskOneTest extends UpgradeTestCase {
   
+  @Test
   public void testSimplestTask() {
     RuntimeService runtimeService = processEngine.getRuntimeService();
     TaskService taskService = processEngine.getTaskService();
