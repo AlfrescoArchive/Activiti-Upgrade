@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>2.0.5</version>
+			<version>2.0.3</version> <!-- Note: not using the latest release at the moment (2.0.5), as it contains a bug: see https://liquibase.jira.com/browse/CORE-1175 . It is fixed on the current master of Liquibase. Maybe check again with 2.0.6? -->
 		</dependency>
 		<!-- Logging -->
 		<dependency>
