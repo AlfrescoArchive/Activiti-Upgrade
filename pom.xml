@@ -111,6 +111,13 @@
 			<name>Alfresco</name>
 			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
 		</repository>
+		<repository>
+        <id>alfresco.snapshot.repo</id>
+        <url>https://maven.alfresco.com/nexus/content/repositories/activiti-snapshots/</url>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>        
+     </repository>
 	</repositories>
 
 	<profiles>
