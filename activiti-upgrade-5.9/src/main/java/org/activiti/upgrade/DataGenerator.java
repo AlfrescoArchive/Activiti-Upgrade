@@ -32,6 +32,7 @@ public class DataGenerator {
     ProcessEngine processEngine = UpgradeUtil.getProcessEngine();
     createCommonData(processEngine);
     create511SpecificData(processEngine);
+    dataFor512(processEngine);
   }
   
   private static void createCommonData(ProcessEngine processEngine) {
@@ -59,6 +60,7 @@ public class DataGenerator {
     variables.put("player", "gonzo");
     runtimeService.startProcessInstanceByKey("taskWithExecutionVariablesProcess", variables);
   }
+
   
   // Test data for changes specific to the 5.11 version
   private static void create511SpecificData(ProcessEngine processEngine) {
@@ -83,6 +85,15 @@ public class DataGenerator {
     for (int i=0; i<5; i++) {
       processEngine.getRuntimeService().startProcessInstanceById(processDefinition.getId());
     }
+  }
+  
+  protected static void dataFor512(ProcessEngine processEngine) {
+    // Process instance user involvement
+    processEngine.getRepositoryService().createDeployment()
+      .addClasspathResource("org/activiti/upgrade/test/testUserInvolvement.bpmn")
+      .deploy();
+    
+    processEngine.getRuntimeService().startProcessInstanceByKey("userInvolvementProcess", "userInvolvementUpgradeTest");
   }
 
 }

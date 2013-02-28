@@ -55,6 +55,17 @@ public class DataGenerator {
     variables.put("instrument", "trumpet");
     variables.put("player", "gonzo");
     runtimeService.startProcessInstanceByKey("taskWithExecutionVariablesProcess", variables);
+    
+    dataFor512(processEngine);
+  }
+
+  protected static void dataFor512(ProcessEngine processEngine) {
+    // Process instance user involvement
+    processEngine.getRepositoryService().createDeployment()
+      .addClasspathResource("org/activiti/upgrade/test/testUserInvolvement.bpmn")
+      .deploy();
+    
+    processEngine.getRuntimeService().startProcessInstanceByKey("userInvolvementProcess", "userInvolvementUpgradeTest");
   }
 
 }
