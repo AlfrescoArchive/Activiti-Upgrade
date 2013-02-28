@@ -89,7 +89,7 @@ public class DataGenerator {
   protected static void dataFor512(ProcessEngine processEngine) {
     // Process instance user involvement
     processEngine.getRepositoryService().createDeployment()
-      .addClasspathResource("org/activiti/upgrade/test/testUserInvolvement.bpmn")
+      .addClasspathResource("org/activiti/upgrade/test/TestUserInvolvement.bpmn")
       .deploy();
     
     processEngine.getRuntimeService().startProcessInstanceByKey("userInvolvementProcess", "userInvolvementUpgradeTest");
