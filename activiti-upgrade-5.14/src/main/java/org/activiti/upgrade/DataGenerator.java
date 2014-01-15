@@ -32,6 +32,7 @@ public class DataGenerator {
     
     // 5.15 specific
     createTaskCategoryData(processEngine);
+    createHistoricVariableTimeStoreTestData(processEngine);
   }
   
   private static void createCommonData(ProcessEngine processEngine) {
@@ -73,6 +74,16 @@ public class DataGenerator {
      // Process instance is started and user task is available
      // The 5.15 upgrade will add the category later after upgrade
      ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("testTaskCategory");
+  }
+  
+  private static void createHistoricVariableTimeStoreTestData(ProcessEngine processEngine) {
+  	 processEngine.getRepositoryService().createDeployment().name("simpleTaskProcess")
+     	.addClasspathResource("org/activiti/upgrade/test/HistoricVariableTimeStoreTest.bpmn20.xml")
+     	.deploy();
+  	 
+  	 HashMap<String, Object> vars = new HashMap<String, Object>();
+  	 vars.put("myVar", "myValue");
+  	 processEngine.getRuntimeService().startProcessInstanceByKey("historicVariableTimeStoreTestProcess", vars);
   }
 
 }
