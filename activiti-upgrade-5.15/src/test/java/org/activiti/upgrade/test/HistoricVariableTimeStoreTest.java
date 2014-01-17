@@ -54,7 +54,7 @@ public class HistoricVariableTimeStoreTest extends UpgradeTestCase {
 			.processInstanceId(processInstance.getId())
 			.variableName("newVar")
 			.singleResult();
-  	assertNotNull(historicVariableInstance.getCreateTime());
+  	assertNull(historicVariableInstance.getCreateTime());
   	assertNotNull(historicVariableInstance.getLastUpdatedTime());
   }
 
