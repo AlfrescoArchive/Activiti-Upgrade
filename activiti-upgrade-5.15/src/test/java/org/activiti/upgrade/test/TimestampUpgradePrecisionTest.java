@@ -43,25 +43,17 @@ public class TimestampUpgradePrecisionTest extends UpgradeTestCase {
 	  
 	  List<Job> jobs = managementService.createJobQuery().processDefinitionId(processDefinition.getId()).list();
 	  Assert.assertEquals(3, jobs.size());
-	  boolean oneHasDuedate = false;
 	  boolean oneHasLockDate = false;
 	  for (Job job : jobs) {
-		  
-		  if (job.getDuedate() != null && !oneHasDuedate) {
-			  oneHasDuedate = true;
-		  } else if (job.getDuedate() != null && oneHasDuedate) {
-			  Assert.fail("Only one with due date is expected");
-		  }
 		  
 		  JobEntity jobEntity = (JobEntity) job;
 		  if (jobEntity.getLockExpirationTime() != null && !oneHasLockDate) {
 			  oneHasLockDate = true;
 		  } else if (jobEntity.getLockExpirationTime() != null && oneHasLockDate) {
-			  Assert.fail("Obnly one with a lock is expected");
+			  Assert.fail("Only one with a lock is expected");
 		  }
 	  }
 	  
-	  Assert.assertTrue("One job should have due date, but none found", oneHasDuedate);
 	  Assert.assertTrue("One job should have lock expiration date, but none found", oneHasLockDate);
   }
 
