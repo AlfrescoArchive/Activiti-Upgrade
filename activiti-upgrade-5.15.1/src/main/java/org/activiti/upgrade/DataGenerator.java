@@ -1,16 +1,10 @@
 package org.activiti.upgrade;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.impl.interceptor.Command;
-import org.activiti.engine.impl.interceptor.CommandContext;
-import org.activiti.engine.impl.persistence.entity.JobEntity;
-import org.activiti.engine.impl.persistence.entity.JobEntityManager;
-import org.activiti.engine.runtime.Job;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.upgrade.helper.UpgradeUtil;
 

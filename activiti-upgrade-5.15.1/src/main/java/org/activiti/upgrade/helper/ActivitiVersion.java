@@ -54,10 +54,4 @@ public class ActivitiVersion implements Comparable<ActivitiVersion> {
     this.minorVersion = minorVersion;
   }
   
-  public static void main(String[] args) {
-    ActivitiVersion oldVersion = new ActivitiVersion("5.7");
-    ActivitiVersion minimalVersion = new ActivitiVersion("5.10");
-    System.out.println("---> " + oldVersion.compareTo(minimalVersion));
-  }
-  
 }
