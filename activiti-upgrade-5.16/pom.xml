@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Activiti Upgrade 5.15</name>
-	<artifactId>activiti-upgrade-5.15</artifactId>
+	<artifactId>activiti-upgrade-5.16</artifactId>
 	<packaging>jar</packaging>
 
     <parent>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
-			<version>5.15</version>
+			<version>5.16-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	
