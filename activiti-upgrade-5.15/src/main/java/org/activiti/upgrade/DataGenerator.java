@@ -35,11 +35,6 @@ public class DataGenerator {
   public static void main(String[] args) {
     ProcessEngine processEngine = UpgradeUtil.getProcessEngine();
     createCommonData(processEngine);
-    
-    // 5.15 specific
-    createTaskCategoryData(processEngine);
-    createHistoricVariableTimeStoreTestData(processEngine);
-    createTimeStampPrecisionUpgradeData(processEngine);
   }
   
   private static void createCommonData(ProcessEngine processEngine) {
