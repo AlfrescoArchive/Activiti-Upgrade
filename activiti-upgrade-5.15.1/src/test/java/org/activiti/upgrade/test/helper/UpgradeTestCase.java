@@ -13,6 +13,8 @@ import org.activiti.upgrade.helper.UpgradeUtil;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +34,8 @@ import org.junit.Ignore;
  */
 @Ignore
 public class UpgradeTestCase {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UpgradeTestCase.class);
   
   protected ProcessEngine processEngine;
   protected TaskService taskService;
@@ -68,9 +72,20 @@ public class UpgradeTestCase {
         
         index++;
       }
+      
+      if (versionMatches) {
+      	logger.info("@RunOnlyWithTestDataFromVersion found on test " + this.getClass() + ": version matches. Running test");
+      } else {
+      	logger.info("@RunOnlyWithTestDataFromVersion found on test " + this.getClass() + ": version DOES NOT match. This test will not run.");
+      }
     
+      // A failed assumption does not mean the code is broken, but that the test provides no useful information
       Assume.assumeTrue(versionMatches);
+      
+    } else {
+    	logger.info("No @RunOnlyWithTestDataFromVersion found on test " + this.getClass() + ": running test.");
     }
+    
   }
   
 }
