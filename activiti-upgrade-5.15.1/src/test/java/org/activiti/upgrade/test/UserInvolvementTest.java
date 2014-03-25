@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.IdentityLinkType;
@@ -70,6 +71,10 @@ public class UserInvolvementTest extends UpgradeTestCase {
     assertEquals(1, runtimeService.createProcessInstanceQuery().involvedUser("gonzo").count());
     assertEquals(1, runtimeService.createProcessInstanceQuery().involvedUser("mispiggy").count());
     assertEquals(1, runtimeService.createProcessInstanceQuery().involvedUser("jos").count());
+    
+    // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("userInvolvementProcess").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
   }
 
 }

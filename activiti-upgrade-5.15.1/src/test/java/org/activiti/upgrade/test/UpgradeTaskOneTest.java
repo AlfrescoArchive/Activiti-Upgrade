@@ -17,6 +17,7 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Test;
@@ -85,5 +86,9 @@ public class UpgradeTaskOneTest extends UpgradeTestCase {
               .processInstanceId(processInstanceId)
               .orderByTaskName().asc()
               .count());
+    
+    // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("simpleTaskProcess").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
   }
 }

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNull;
 import junit.framework.Assert;
 
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
 import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
@@ -52,6 +53,11 @@ public class TaskCategoryTest extends UpgradeTestCase {
   	
   	// Finish process
   	taskService.complete(task.getId());
+  	
+  	// Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("testTaskCategory").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
+  	
   }
 
 }

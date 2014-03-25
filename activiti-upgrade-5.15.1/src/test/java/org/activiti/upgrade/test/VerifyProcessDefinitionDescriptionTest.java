@@ -12,10 +12,12 @@ package org.activiti.upgrade.test;
  * limitations under the License.
  */
 
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -44,6 +46,9 @@ public class VerifyProcessDefinitionDescriptionTest extends UpgradeTestCase {
     processDefinition = getLatestVersionOfProcessDefinition();
     assertEquals("This is not really a very usable process...", processDefinition.getDescription());
 
+    // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("verifyProcessDefinitionDescription").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
   }
 
   protected void deployTestProcess() {

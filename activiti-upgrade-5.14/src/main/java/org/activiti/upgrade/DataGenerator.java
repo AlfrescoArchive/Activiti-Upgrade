@@ -12,6 +12,7 @@ import org.activiti.engine.impl.persistence.entity.JobEntity;
 import org.activiti.engine.impl.persistence.entity.JobEntityManager;
 import org.activiti.engine.runtime.Job;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.activiti.upgrade.helper.UpgradeUtil;
 
 /* Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,17 +106,22 @@ public class DataGenerator {
 	  }
 	  
 	  // Set a lock time for the job (hacky)
-	  final Job job = processEngine.getManagementService().createJobQuery().processInstanceId(processInstance.getId()).singleResult();
+	  final Job job = processEngine.getManagementService().createJobQuery().processInstanceId(processInstance.getId()).list().get(0);
 	  processEngine.getManagementService().executeCommand(new Command<Void>() {
-		public Void execute(CommandContext commandContext) {
-			JobEntityManager jobEntityManager = commandContext.getJobEntityManager();
-			JobEntity jobEntity = jobEntityManager.findJobById(job.getId());
-			jobEntity.setLockExpirationTime(new Date());
-			jobEntity.setLockOwner("Upgrade test");
-			jobEntity.setDuedate(new Date());
-			return null;
-		}
+			public Void execute(CommandContext commandContext) {
+				JobEntityManager jobEntityManager = commandContext.getJobEntityManager();
+				JobEntity jobEntity = jobEntityManager.findJobById(job.getId());
+				jobEntity.setLockExpirationTime(new Date());
+				jobEntity.setLockOwner("Upgrade test");
+				jobEntity.setDuedate(new Date());
+				return null;
+			}
 	  });
+	  
+	  // One task gets a due date
+	  Task task = processEngine.getTaskService().createTaskQuery().list().get(0);
+	  task.setDueDate(new Date());
+	  processEngine.getTaskService().saveTask(task);
   }
 
 }

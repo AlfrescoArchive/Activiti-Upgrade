@@ -16,6 +16,7 @@ package org.activiti.upgrade.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Test;
@@ -52,5 +53,9 @@ public class UpgradeTaskTwoTest extends UpgradeTestCase {
       .processInstanceId(processInstanceId)
       .list()
       .size());
+    
+    // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("taskWithExecutionVariablesProcess").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
   }
 }

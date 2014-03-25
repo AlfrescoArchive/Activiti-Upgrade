@@ -13,7 +13,10 @@ package org.activiti.upgrade.test;
  */
 
 import org.activiti.engine.ActivitiException;
+
 import static org.junit.Assert.*;
+
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -30,9 +33,11 @@ import org.junit.Test;
 @RunOnlyWithTestDataFromVersion(versions = {"5.7", "5.8", "5.9", "5.10"})
 public class SuspendAndActivateFunctionalityTest extends UpgradeTestCase {
 
-  @Test
-  public void testSuspendProcessDefinition() {
+	@Test
+	public void testProcessSuspension() {
 
+		// PROCESS DEFINITION SUSPENSION
+		
     ProcessDefinition processDefinition = processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("suspendAndActivate")
             .singleResult();
     assertNotNull(processDefinition);
@@ -57,12 +62,11 @@ public class SuspendAndActivateFunctionalityTest extends UpgradeTestCase {
     processEngine.getRepositoryService().activateProcessDefinitionById(processDefinition.getId(), true, null);
     assertEquals(5, processEngine.getRuntimeService().createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).active().count());
     assertEquals(0, processEngine.getRuntimeService().createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).suspended().count());
-  }
 
-  @Test
-  public void testSuspendProcessInstance() {
-
-    ProcessDefinition processDefinition = processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("suspendAndActivate")
+    
+    // PROCESS INSTANCE SUSPENSION
+    
+    processDefinition = processEngine.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("suspendAndActivate")
             .singleResult();
     assertNotNull(processDefinition);
     assertFalse(processDefinition.isSuspended());
@@ -89,6 +93,10 @@ public class SuspendAndActivateFunctionalityTest extends UpgradeTestCase {
     // Activate again
     processEngine.getRuntimeService().activateProcessInstanceById(processInstance.getId());
 
+    // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("suspendAndActivate").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
+    
   }
 
 }

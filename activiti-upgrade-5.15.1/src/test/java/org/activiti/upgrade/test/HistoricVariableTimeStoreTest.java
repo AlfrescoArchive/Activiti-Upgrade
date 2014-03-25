@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
@@ -56,6 +57,11 @@ public class HistoricVariableTimeStoreTest extends UpgradeTestCase {
 			.singleResult();
   	assertNull(historicVariableInstance.getCreateTime());
   	assertNotNull(historicVariableInstance.getLastUpdatedTime());
+  	
+  	
+  	 // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("historicVariableTimeStoreTestProcess").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
   }
 
 }

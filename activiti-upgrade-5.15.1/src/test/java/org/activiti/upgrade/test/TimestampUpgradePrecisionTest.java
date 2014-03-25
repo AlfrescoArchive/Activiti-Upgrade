@@ -14,13 +14,22 @@ package org.activiti.upgrade.test;
 
 import java.util.List;
 
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.EventSubscriptionQueryImpl;
+import org.activiti.engine.impl.ProcessEngineImpl;
+import org.activiti.engine.impl.persistence.entity.EventSubscriptionEntity;
 import org.activiti.engine.impl.persistence.entity.JobEntity;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Job;
+import org.activiti.engine.task.Task;
 import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 /**
  * This is an upgrade test added for the 5.15 release. In that release, 
@@ -39,11 +48,13 @@ public class TimestampUpgradePrecisionTest extends UpgradeTestCase {
 			  .processDefinitionKey("testTimestampPrecisionUpgrade").singleResult();
 	  
 	  // After upgrade, there should be three jobs availble.
-	  // One has a duedate set and one has a lock time set
+	  //One has a lock time set
 	  
 	  List<Job> jobs = managementService.createJobQuery().processDefinitionId(processDefinition.getId()).list();
-	  Assert.assertEquals(3, jobs.size());
+	  Assert.assertEquals(6, jobs.size());
 	  boolean oneHasLockDate = false;
+	  int nrWithDueDate = 0;
+	  int nrWithoutDuedate = 0;
 	  for (Job job : jobs) {
 		  
 		  JobEntity jobEntity = (JobEntity) job;
@@ -52,9 +63,68 @@ public class TimestampUpgradePrecisionTest extends UpgradeTestCase {
 		  } else if (jobEntity.getLockExpirationTime() != null && oneHasLockDate) {
 			  Assert.fail("Only one with a lock is expected");
 		  }
+		  
+		  // due date assertion
+		  if (job.getDuedate() != null) {
+		  	nrWithDueDate++;
+		  } else {
+		  	nrWithoutDuedate++;
+		  }
 	  }
+	  Assert.assertEquals(3, nrWithDueDate);
+	  Assert.assertEquals(3, nrWithoutDuedate);;
 	  
 	  Assert.assertTrue("One job should have lock expiration date, but none found", oneHasLockDate);
+	  
+	  // Assert deploy time upgrade
+	  for (Deployment deployment : repositoryService.createDeploymentQuery().list()) {
+	  	Assert.assertNotNull(deployment.getDeploymentTime());
+	  }
+
+	  // Assert create time for tasks
+	  List<Task> tasks = taskService.createTaskQuery().processDefinitionKey("testTimestampPrecisionUpgrade").list();
+	  Assert.assertEquals(3, tasks.size());
+	  
+	  boolean oneWithDuedate = false;
+	  for (Task task : tasks) {
+	  	Assert.assertNotNull(task.getCreateTime());
+	  	
+	  	if (task.getDueDate() != null && !oneWithDuedate) {
+	  		oneWithDuedate = true;
+	  	} else if (task.getDueDate() != null && oneWithDuedate) {
+	  		Assert.fail("Only one task with due date is expected");
+	  	}
+	  }
+	  
+	  // Assert event subscription date
+	  List<EventSubscriptionEntity> eventSubscriptionEntities = new EventSubscriptionQueryImpl(((ProcessEngineImpl)processEngine).getProcessEngineConfiguration().getCommandExecutor()).list();
+	  Assert.assertEquals(3, eventSubscriptionEntities.size());
+	  for (EventSubscriptionEntity eventSubscriptionEntity : eventSubscriptionEntities) {
+	  	Assert.assertNotNull(eventSubscriptionEntity);
+	  }
+	  
+	  // Assert process instance start time (history)
+	  for (HistoricProcessInstance historicProcessInstance : historyService.createHistoricProcessInstanceQuery().processDefinitionKey("testTimestampPrecisionUpgrade").list()) {
+	  	Assert.assertNotNull(historicProcessInstance.getStartTime());
+	  	Assert.assertNull("process has not yet ended, but end time was not null", historicProcessInstance.getEndTime());
+	  }
+	  
+	  // Assert activity start and end time
+	  for (HistoricActivityInstance historicActivityInstance : historyService.createHistoricActivityInstanceQuery().list()) {
+	  	Assert.assertNotNull(historicActivityInstance.getStartTime());
+	  }
+	  
+	  // Assert historic start time
+	  for (HistoricTaskInstance historicTaskInstance : historyService.createHistoricTaskInstanceQuery().processDefinitionKey("testTimestampPrecisionUpgrade").list()) {
+	  	Assert.assertNotNull(historicTaskInstance.getStartTime());
+	  	Assert.assertNull(historicTaskInstance.getEndTime());
+	  	Assert.assertNull(historicTaskInstance.getClaimTime());
+	  }
+	  
+	  // Cleanup
+	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("testTimestampPrecisionUpgrade").singleResult();
+	  repositoryService.deleteDeployment(deployment.getId(), true);
+	  
   }
 
 }
