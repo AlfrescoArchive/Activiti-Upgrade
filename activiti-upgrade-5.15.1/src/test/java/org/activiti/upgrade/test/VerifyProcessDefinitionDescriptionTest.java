@@ -12,13 +12,17 @@ package org.activiti.upgrade.test;
  * limitations under the License.
  */
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.util.List;
+
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * This is an upgrade test added for the 5.11 release. In that release, we've
@@ -47,8 +51,10 @@ public class VerifyProcessDefinitionDescriptionTest extends UpgradeTestCase {
     assertEquals("This is not really a very usable process...", processDefinition.getDescription());
 
     // Cleanup
-	  Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey("verifyProcessDefinitionDescription").singleResult();
-	  repositoryService.deleteDeployment(deployment.getId(), true);
+	List<Deployment> deployments = repositoryService.createDeploymentQuery().processDefinitionKey("verifyProcessDefinitionDescription").list();
+	for (Deployment deployment : deployments) {
+		repositoryService.deleteDeployment(deployment.getId(), true);
+	}
   }
 
   protected void deployTestProcess() {
