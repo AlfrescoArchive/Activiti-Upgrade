@@ -16,6 +16,7 @@ import org.activiti.engine.test.Deployment;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -50,6 +51,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 		runtimeService.removeEventListener(databaseEventLogger);
 	}
 	
+	@Test
 	@Deployment(resources = {"org/activiti/engine/test/api/event/DatabaseEventLoggerProcess.bpmn20.xml"})
 	public void testDatabaseEvents() throws JsonParseException, JsonMappingException, IOException {
 		
