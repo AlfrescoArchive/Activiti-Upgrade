@@ -69,7 +69,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 				runtimeService.startProcessInstanceByKey("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld"));
 		
 			// Verify event log entries
-			List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(null, null);
+			List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(0L, 100L);
 			
 			String processDefinitionId = processInstance.getProcessDefinitionId();
 			Iterator<EventLogEntry> iterator = eventLogEntries.iterator();
@@ -259,7 +259,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 			}
 			
 			// Completing two tasks
-			for (Task task : taskService.createTaskQuery().list()) {
+			for (Task task : taskService.createTaskQuery().processDefinitionId(processDefinitionId).list()) {
 				Authentication.setAuthenticatedUserId(task.getAssignee());
 				Map<String, Object> varMap = new HashMap<String, Object>();
 		    varMap.put("test", "test");
@@ -269,6 +269,15 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 			
 			// Verify events
 			eventLogEntries = managementService.getEventLogEntries(lastLogNr, 100L);
+			
+			iterator = eventLogEntries.iterator();
+			while (iterator.hasNext()) {
+				EventLogEntry entry = iterator.next();
+				if (entry.getProcessDefinitionId() != null && !entry.getProcessDefinitionId().equals(processDefinitionId)) {
+					iterator.remove();
+				}
+			}
+			
 			assertEquals(15, eventLogEntries.size());
 			
 			for (int i=0; i< eventLogEntries.size(); i++) {
