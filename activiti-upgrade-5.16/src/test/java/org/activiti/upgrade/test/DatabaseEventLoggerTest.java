@@ -42,6 +42,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 
 	@Before
 	public void setup() {
+		super.setup();
 	  databaseEventLogger = new EventLogger(processEngineConfiguration.getClock());
 	  runtimeService.addEventListener(databaseEventLogger);
 	}
