@@ -1,5 +1,10 @@
 package org.activiti.upgrade.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +16,8 @@ import org.activiti.engine.impl.event.logger.EventLogger;
 import org.activiti.engine.impl.event.logger.handler.Fields;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.util.CollectionUtil;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.test.Deployment;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +27,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.junit.Assert.*;
 
 /**
  * In the 5.16 release, database event logging was added.
@@ -53,8 +56,11 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 	}
 	
 	@Test
-	@Deployment(resources = {"org/activiti/engine/test/api/event/DatabaseEventLoggerProcess.bpmn20.xml"})
 	public void testDatabaseEvents() throws JsonParseException, JsonMappingException, IOException {
+		
+		Deployment deployment = repositoryService.createDeployment()
+			.addClasspathResource("org/activiti/upgrade/test/DatabaseEventLoggerProcess.bpmn20.xml")
+			.deploy();
 		
 		// Run process to gather data
 		runtimeService.startProcessInstanceByKey("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld≈t"));
@@ -351,6 +357,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 			managementService.deleteEventLogEntry(eventLogEntry.getLogNumber());
 		}
 		
+		repositoryService.deleteDeployment(deployment.getId(), true);
 	}
 	
 	
