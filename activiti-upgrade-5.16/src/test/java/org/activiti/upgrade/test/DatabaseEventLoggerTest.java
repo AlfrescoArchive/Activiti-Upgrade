@@ -66,7 +66,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 		
 		// Run process to gather data
 		ProcessInstance processInstance = 
-				runtimeService.startProcessInstanceByKey("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld≈t"));
+				runtimeService.startProcessInstanceByKey("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld"));
 		
 			// Verify event log entries
 			List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(null, null);
