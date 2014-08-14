@@ -23,6 +23,9 @@
 		<module>activiti-upgrade-5.13</module>
 		<module>activiti-upgrade-5.14</module>
 		<module>activiti-upgrade-5.15</module>
+		<module>activiti-upgrade-5.15.1</module>
+		<module>activiti-upgrade-5.16</module>
+		<module>activiti-upgrade-5.16.1</module>
 	</modules>
 
 	<dependencies>
