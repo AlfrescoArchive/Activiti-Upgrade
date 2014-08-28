@@ -62,14 +62,18 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 		
 		Deployment deployment = repositoryService.createDeployment()
 			.addClasspathResource("org/activiti/upgrade/test/DatabaseEventLoggerProcess.bpmn20.xml")
+			.tenantId("myTenant")
 			.deploy();
+		
+		int nrOfEntries = managementService.getEventLogEntries(null, null).size();
 		
 		// Run process to gather data
 		ProcessInstance processInstance = 
-				runtimeService.startProcessInstanceByKey("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld"));
+				runtimeService.startProcessInstanceByKeyAndTenantId("DatabaseEventLoggerProcess", CollectionUtil.singletonMap("testVar", "helloWorld"), "myTenant");
+		
 		
 			// Verify event log entries
-			List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(0L, 100L);
+			List<EventLogEntry> eventLogEntries = managementService.getEventLogEntries(null, null);
 			
 			String processDefinitionId = processInstance.getProcessDefinitionId();
 			Iterator<EventLogEntry> iterator = eventLogEntries.iterator();
@@ -80,7 +84,7 @@ public class DatabaseEventLoggerTest extends UpgradeTestCase {
 				}
 			}
 			
-			assertEquals(15, eventLogEntries.size());
+			assertEquals(nrOfEntries + 15, eventLogEntries.size());
 			
 			long lastLogNr = -1;
 			for (int i=0; i< eventLogEntries.size(); i++) {
