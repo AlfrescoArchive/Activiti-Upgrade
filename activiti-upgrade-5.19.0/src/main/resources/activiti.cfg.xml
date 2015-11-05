@@ -14,6 +14,8 @@
         <property name="jobExecutorActivate" value="false" />
         <property name="asyncExecutorEnabled" value="true" />
         <property name="asyncExecutorActivate" value="false" />
+        
+        <property name="enableProcessDefinitionInfoCache" value="true" />
     </bean>
 
 </beans>
