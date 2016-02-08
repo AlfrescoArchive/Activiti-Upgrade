@@ -31,6 +31,7 @@
 		<module>activiti-upgrade-5.17.0</module>
 		<module>activiti-upgrade-5.18.0</module>
 		<module>activiti-upgrade-5.19.0</module>
+		<module>activiti-upgrade-5.20.0</module>
 	</modules>
 
 	<dependencies>
@@ -58,8 +59,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.jdbc</groupId>
-			<artifactId>ojdbc5</artifactId>
-			<version>11.2.0.1.0</version>
+			<artifactId>ojdbc7</artifactId>
+			<version>12.1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.jtds</groupId>

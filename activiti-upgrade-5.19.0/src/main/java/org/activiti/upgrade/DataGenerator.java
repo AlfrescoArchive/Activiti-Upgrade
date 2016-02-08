@@ -29,6 +29,7 @@ public class DataGenerator {
   public static void main(String[] args) {
     ProcessEngine processEngine = UpgradeUtil.getProcessEngine();
     createCommonData(processEngine);
+    createMessageProcessDefinitionIdAdditionTest(processEngine);
   }
   
   private static void createCommonData(ProcessEngine processEngine) {
@@ -55,6 +56,19 @@ public class DataGenerator {
     variables.put("instrument", "trumpet");
     variables.put("player", "gonzo");
     runtimeService.startProcessInstanceByKey("taskWithExecutionVariablesProcess", variables);
+  }
+  
+  /**
+   * In the database schema version 5.20.0.2, an update was added that makes sure a message start event
+   * always has a process definition id. 
+   */
+  private static void createMessageProcessDefinitionIdAdditionTest(ProcessEngine processEngine) {
+    processEngine.getRepositoryService()
+      .createDeployment()
+      .name("simpleTaskProcess")
+      .addClasspathResource("org/activiti/upgrade/test/messageStartEvent.bpmn20.xml")
+      .deploy();
+    processEngine.getRuntimeService().startProcessInstanceByMessage("myStartMessage");
   }
   
 }
