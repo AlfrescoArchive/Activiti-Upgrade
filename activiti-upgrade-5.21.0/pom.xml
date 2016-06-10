@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Activiti Upgrade 5.20.0</name>
-	<artifactId>activiti-upgrade-5.20.0</artifactId>
+	<artifactId>activiti-upgrade-5.21.0</artifactId>
 	<packaging>jar</packaging>
 
     <parent>
