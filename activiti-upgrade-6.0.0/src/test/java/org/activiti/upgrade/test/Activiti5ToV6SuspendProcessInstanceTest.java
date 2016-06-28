@@ -15,6 +15,7 @@ package org.activiti.upgrade.test;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import org.junit.Test;
 /**
  * @author Joram Barrez
  */
+@RunOnlyWithTestDataFromVersion(versions = {"5.21.0"})
 public class Activiti5ToV6SuspendProcessInstanceTest extends UpgradeTestCase {
 
 	@Test

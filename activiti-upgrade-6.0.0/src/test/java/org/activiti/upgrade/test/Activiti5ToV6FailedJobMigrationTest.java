@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.activiti.engine.runtime.Job;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ import junit.framework.Assert;
 /**
  * @author Joram Barrez
  */
+@RunOnlyWithTestDataFromVersion(versions = {"5.21.0"})
 public class Activiti5ToV6FailedJobMigrationTest extends UpgradeTestCase {
 
 	@Test

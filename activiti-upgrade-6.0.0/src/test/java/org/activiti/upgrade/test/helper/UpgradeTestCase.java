@@ -9,13 +9,9 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.activiti.upgrade.helper.ActivitiVersion;
 import org.activiti.upgrade.helper.UpgradeUtil;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /* Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +30,8 @@ import org.slf4j.LoggerFactory;
  * @author Joram Barrez
  */
 @Ignore
-public class UpgradeTestCase {
+public abstract class UpgradeTestCase {
 	
-	private static final Logger logger = LoggerFactory.getLogger(UpgradeTestCase.class);
-  
   protected ProcessEngine processEngine;
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
   protected TaskService taskService;
@@ -48,9 +42,11 @@ public class UpgradeTestCase {
   protected IdentityService identityService;
   protected HistoryService historyService;
   
+  protected boolean runningTests;
+  
   @Before
   public void setup() {
-    this.processEngine = UpgradeUtil.getProcessEngine("activiti.cfg.xml");
+  	this.processEngine = UpgradeUtil.getProcessEngine("activiti.cfg.xml");
     this.processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
     this.taskService = processEngine.getTaskService();
     this.runtimeService = processEngine.getRuntimeService();
@@ -60,35 +56,7 @@ public class UpgradeTestCase {
     this.identityService = processEngine.getIdentityService();
     this.historyService = processEngine.getHistoryService();
     
-    // verify if there is an minimal version requirement on the test
-    RunOnlyWithTestDataFromVersion runOnlyWithTestDataFromVersion = this.getClass().getAnnotation(RunOnlyWithTestDataFromVersion.class);
-    if (runOnlyWithTestDataFromVersion != null) {
-      
-      String[] versions = runOnlyWithTestDataFromVersion.versions();
-      boolean versionMatches = false;
-      
-      int index = 0;
-      while (!versionMatches && index < versions.length) {
-        ActivitiVersion requiredVersion = new ActivitiVersion(versions[index]);
-        ActivitiVersion oldVersion = UpgradeUtil.getOldVersion(); // This is the version against which the data was generated
-        versionMatches = oldVersion.compareTo(requiredVersion) == 0;
-        
-        index++;
-      }
-      
-      if (versionMatches) {
-      	logger.info("@RunOnlyWithTestDataFromVersion found on test " + this.getClass() + ": version matches. Running test");
-      } else {
-      	logger.info("@RunOnlyWithTestDataFromVersion found on test " + this.getClass() + ": version DOES NOT match. This test will not run.");
-      }
-    
-      // A failed assumption does not mean the code is broken, but that the test provides no useful information
-      Assume.assumeTrue(versionMatches);
-      
-    } else {
-    	logger.info("No @RunOnlyWithTestDataFromVersion found on test " + this.getClass() + ": running test.");
-    }
-    
+    this.runningTests = TestAnnotationUtil.validateRunOnlyWithTestDataFromVersionAnnotation(this.getClass());
   }
-  
+
 }

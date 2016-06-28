@@ -20,8 +20,17 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import org.activiti.bpmn.model.FlowElement;
+import org.activiti.engine.FormService;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.ManagementService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.compatibility.Activiti5CompatibilityHandler;
 import org.activiti.engine.impl.asyncexecutor.AsyncExecutor;
+import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
@@ -30,20 +39,24 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.upgrade.helper.EntitySnapshotUtil;
 import org.activiti.upgrade.helper.EntitySnapshotUtil.EntitySnapShot;
+import org.activiti.upgrade.helper.UpgradeUtil;
+import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
+import org.activiti.upgrade.test.helper.TestAnnotationUtil;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.jayway.awaitility.Awaitility;
 
-import junit.framework.Assert;
 
 /**
  * @author Joram Barrez
  */
+@RunOnlyWithTestDataFromVersion(versions = {"5.21.0"})
 public class Activiti5ToV6JobMigrationTest extends UpgradeTestCase {
-
+	
 	/*
 	 * See the DataGenerator in 5.21. it lists all kind of cases, which are referenced here by their number.
 	 */
@@ -53,20 +66,20 @@ public class Activiti5ToV6JobMigrationTest extends UpgradeTestCase {
 	private EntitySnapShot entitySnapShot;
 	
 	@Before
-	public void createDataSet() throws Exception {
-		entitySnapShot = EntitySnapshotUtil.createEntitySnapshot(processEngine);
+	public void moreSetup() throws Exception {
+		if (runningTests) {
+			entitySnapShot = EntitySnapshotUtil.createEntitySnapshot(processEngine);
+		
+			this.startTime = new Date();
+			processEngineConfiguration.getClock().setCurrentTime(startTime);
+		}
 	}
 	
 	@After
 	public void resetData() throws Exception {
-		EntitySnapshotUtil.restore(processEngine, entitySnapShot);
-	}
-	
-	
-	@Before
-	public void fixClock() {
-		this.startTime = new Date();
-		processEngineConfiguration.getClock().setCurrentTime(startTime);
+		if (runningTests) {
+			EntitySnapshotUtil.restore(processEngine, entitySnapShot);
+		}
 	}
 	
 	@Test
