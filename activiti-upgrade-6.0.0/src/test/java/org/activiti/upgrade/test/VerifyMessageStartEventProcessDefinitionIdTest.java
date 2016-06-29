@@ -2,14 +2,13 @@ package org.activiti.upgrade.test;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.activiti.engine.impl.EventSubscriptionQueryImpl;
 import org.activiti.engine.impl.interceptor.Command;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.persistence.entity.EventSubscriptionEntity;
 import org.activiti.upgrade.test.helper.RunOnlyWithTestDataFromVersion;
 import org.activiti.upgrade.test.helper.UpgradeTestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 @RunOnlyWithTestDataFromVersion(versions = {"5.19.0"})
