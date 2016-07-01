@@ -106,7 +106,7 @@ public class DataGenerator {
 	  }
 	  
 	  // Set a lock time for the job (hacky)
-	  final Job job = processEngine.getManagementService().createJobQuery().processInstanceId(processInstance.getId()).list().get(0);
+	  final Job job = processEngine.getManagementService().createJobQuery().messages().processInstanceId(processInstance.getId()).list().get(0);
 	  processEngine.getManagementService().executeCommand(new Command<Void>() {
 			public Void execute(CommandContext commandContext) {
 				JobEntityManager jobEntityManager = commandContext.getJobEntityManager();
