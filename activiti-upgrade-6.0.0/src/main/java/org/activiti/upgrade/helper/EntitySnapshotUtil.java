@@ -269,7 +269,10 @@ public class EntitySnapshotUtil {
 						Statement statement = null;
 						try {
 							statement = commandContext.getDbSqlSession().getSqlSession().getConnection().createStatement();
-							statement.executeUpdate("delete from " + entityClassToTable(entity));
+							String table = entityClassToTable(entity);
+							if (table != null) {
+								statement.executeUpdate("delete from " + table);
+							}
 						} catch (SQLException e) {
 							e.printStackTrace();
 						} finally {
